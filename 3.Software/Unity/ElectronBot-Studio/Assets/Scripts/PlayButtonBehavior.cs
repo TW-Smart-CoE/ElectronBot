@@ -15,7 +15,7 @@ public class PlayButtonBehavior : MonoBehaviour
 
     private bool isPlaying = false;
     
-    public 
+    // public 
 
 
     // Start is called before the first frame update
@@ -78,6 +78,6 @@ public class PlayButtonBehavior : MonoBehaviour
 
     public void OnDeltaTimeChanged(float _val)
     {
-        Debug.Log(_val);
+        Logger.Instance.Log("" + _val);
     }
 }

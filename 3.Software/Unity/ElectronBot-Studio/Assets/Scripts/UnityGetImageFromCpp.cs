@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using System.Collections;
 using System.Runtime.InteropServices;
 
 public class UnityGetImageFromCpp : MonoBehaviour
@@ -40,15 +41,26 @@ public class UnityGetImageFromCpp : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        OpenCamera();
         // while (!RunExecutable.is_camera_opened) ;
         try {
             Native_OnInit();
         } catch (EntryPointNotFoundException e) {
-            Debug.LogError("Native_OnInit can't be load");
+            Logger.Instance.LogError("Native_OnInit can't be load");
         }
         InitTexture();
         texturePlaneEmoji.GetComponent<Renderer>().material.mainTexture = mTexEmoji;
         texturePlaneCamera.GetComponent<Renderer>().material.mainTexture = mTexCamera;
+    }
+
+    IEnumerator OpenCamera() { 
+        yield return Application.RequestUserAuthorization(UserAuthorization.WebCam);
+        if (Application.HasUserAuthorization(UserAuthorization.WebCam))
+        {
+            Logger.Instance.Log("Camera Authorized");
+        } else {
+            Logger.Instance.Log("Camera Unauthorized");
+        }
     }
 
     // Update is called once per frame
@@ -84,7 +96,7 @@ public class UnityGetImageFromCpp : MonoBehaviour
             Native_OnKeyFrameChange(poseEditor.timelineFrames[robot.currentFrame]
                 .GetComponent<FrameMeta>().filePath);
 
-            Debug.Log(path);
+            Logger.Instance.Log(path);
         }
     }
 
@@ -124,7 +136,7 @@ public class UnityGetImageFromCpp : MonoBehaviour
             robot.sliderAngleBody.Value = (int) retJoints[5];
             
             
-            Debug.Log(retJoints[0]+" "+retJoints[1]+" "+retJoints[2]+" "+
+            Logger.Instance.Log(retJoints[0]+" "+retJoints[1]+" "+retJoints[2]+" "+
                       retJoints[3]+" "+retJoints[4]+" "+retJoints[5]);
         }
 
@@ -145,12 +157,12 @@ public class UnityGetImageFromCpp : MonoBehaviour
         mPixelHandleCamera.Free();
 
         try {
-        Native_OnExit();
+            Native_OnExit();
         } catch (EntryPointNotFoundException e) {
-            Debug.LogError("Native_OnExit can't be load");
+            Logger.Instance.LogError("Native_OnExit can't be load");
         }
 
-        Debug.Log("OnApplicationQuit called");
+        Logger.Instance.Log("OnApplicationQuit called");
     }
 
 // #endif

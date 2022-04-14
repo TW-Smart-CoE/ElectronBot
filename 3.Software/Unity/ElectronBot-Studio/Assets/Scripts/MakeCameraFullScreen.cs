@@ -110,7 +110,7 @@ public class MakeCameraFullScreen : MonoBehaviour
         }
 #endif
 
-        Debug.Log(TAG + "Screen width:" + screenWidth + " Screen height:" + screenHeight);
+        Logger.Instance.Log(TAG + "Screen width:" + screenWidth + " Screen height:" + screenHeight);
     }
 
 

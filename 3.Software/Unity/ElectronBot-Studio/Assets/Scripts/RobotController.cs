@@ -92,7 +92,7 @@ public class RobotController : MonoBehaviour
             currentFrame = requestFrame;
             cvManager.KeyFrameChangeUpdate();
 
-            Debug.Log(">>>> " + currentFrame);
+            Logger.Instance.Log(">>>> " + currentFrame);
         }
     }
 
