@@ -26,7 +26,7 @@ class Logger {
 
     public static Logger Instance {
         get {
-            Debug.Log("Logger Instance");
+            // Debug.Log("Logger Instance");
             return logger;
         }
     }
