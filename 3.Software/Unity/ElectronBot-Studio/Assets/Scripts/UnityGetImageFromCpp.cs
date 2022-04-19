@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using UnityEngine.UI;
 
 public class UnityGetImageFromCpp : MonoBehaviour
 {
@@ -9,6 +11,7 @@ public class UnityGetImageFromCpp : MonoBehaviour
     public GameObject texturePlaneCamera;
     public int textureWidth = 512;
     public int textureHeight = 512;
+    public Dropdown cameraDropDown;
 
     private Texture2D mTexEmoji;
     private Color32[] mPixel32Emoji;
@@ -21,6 +24,7 @@ public class UnityGetImageFromCpp : MonoBehaviour
 
     public RobotController robot;
     public PoseEditor poseEditor;
+    public bool showCameraOnRobot;
 
 
 // #if UNITY_EDITOR
@@ -37,10 +41,18 @@ public class UnityGetImageFromCpp : MonoBehaviour
     [DllImport("ElectronBotSDK-UnityBridge")]
     private static extern void Native_OnInit();
 
+    [DllImport("ElectronBotSDK-UnityBridge")]
+    private static extern void Native_OpenCamera(int index);
+
+    [DllImport("ElectronBotSDK-UnityBridge")]
+    private static extern void Native_ShowCameraOnRobot(bool enable);
+
 
     // Use this for initialization
     void Start()
     {
+        Logger.Instance.Log("UnityGetImageFromCpp Start");
+        FindWebCams();
         OpenCamera();
         // while (!RunExecutable.is_camera_opened) ;
         try {
@@ -61,6 +73,29 @@ public class UnityGetImageFromCpp : MonoBehaviour
         } else {
             Logger.Instance.Log("Camera Unauthorized");
         }
+    }
+    void FindWebCams()
+    {
+        cameraDropDown.ClearOptions();
+        Logger.Instance.Log("Finding WebCams");
+        List<string> cameraList = new List<string>();
+        foreach (var device in WebCamTexture.devices)
+        {
+            Logger.Instance.Log("WebCam Name: " + device.name);
+            cameraList.Add(device.name);
+        }
+        cameraDropDown.AddOptions(cameraList);
+    }
+
+    public void CameraDropDown_OnValueChanged()
+    {
+        Logger.Instance.Log(string.Format("Camera Index {0} Selected", cameraDropDown.value));
+        Native_OpenCamera(cameraDropDown.value);
+    }
+    public void CameraImage_OnClick()
+    {
+        showCameraOnRobot = !showCameraOnRobot;
+        Native_ShowCameraOnRobot(showCameraOnRobot);
     }
 
     // Update is called once per frame
