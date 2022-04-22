@@ -6,8 +6,13 @@
 #include <thread>
 #include <opencv2/opencv.hpp>
 
+#if defined(__WIN32__)
+    #define WIN_API __declspec(dllexport)
+#else
+    #define WIN_API
+#endif
 
-class __declspec(dllexport) ElectronLowLevel
+class WIN_API ElectronLowLevel
 {
 public:
     ElectronLowLevel()
@@ -23,6 +28,9 @@ public:
     void SetImageSrc(const cv::Mat &_mat);
     void SetImageSrc(const std::string &_filePath);
     void SetExtraData(uint8_t* _data, uint32_t _len = 32);
+    void SetJointAngles(float _j1, float _j2, float _j3, float _j4, float _j5, float _j6,
+                        bool _enable = false);
+    void GetJointAngles(float* _jointAngles);
     uint8_t* GetExtraData(uint8_t* _data = nullptr);
 
     int USB_VID = 0x1001;

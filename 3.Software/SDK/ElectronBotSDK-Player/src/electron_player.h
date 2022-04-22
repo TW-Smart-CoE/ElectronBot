@@ -7,7 +7,7 @@
 #include "electron_low_level.h"
 
 
-class __declspec(dllexport) ElectronPlayer
+class WIN_API ElectronPlayer
 {
 public:
     ElectronPlayer()

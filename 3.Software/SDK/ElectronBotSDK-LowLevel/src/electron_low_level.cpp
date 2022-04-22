@@ -1,6 +1,14 @@
 #include "electron_low_level.h"
+
+#include <opencv2/imgproc/types_c.h>
+
 #include "USBInterface.h"
 
+
+void LowLevel_OnInit()
+{
+    printf("Inited\n");
+}
 
 bool ElectronLowLevel::Sync()
 {
@@ -135,8 +143,7 @@ void ElectronLowLevel::SyncTask(ElectronLowLevel* _obj)
     for (int p = 0; p < 4; p++)
     {
         // Wait MCU request & receive 32bytes extra data
-        _obj->ReceivePacket(reinterpret_cast<uint8_t*>(_obj->extraDataBufferRx),
-                            1, 32);
+        _obj->ReceivePacket(reinterpret_cast<uint8_t*>(_obj->extraDataBufferRx), 1, 32);
 
         // Transmit buffer
         _obj->TransmitPacket(reinterpret_cast<uint8_t*>(_obj->frameBufferTx[index]) + frameBufferOffset,

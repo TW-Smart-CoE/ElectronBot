@@ -6,8 +6,13 @@
 #include <thread>
 #include <opencv2/opencv.hpp>
 
+#if defined(__WIN32__)
+    #define WIN_API __declspec(dllexport)
+#else
+    #define WIN_API
+#endif
 
-class __declspec(dllexport) ElectronLowLevel
+class WIN_API ElectronLowLevel
 {
 public:
     ElectronLowLevel()
@@ -47,5 +52,7 @@ private:
     static void SyncTask(ElectronLowLevel* _obj);
 };
 
+extern "C"
+void LowLevel_OnInit();
 
 #endif

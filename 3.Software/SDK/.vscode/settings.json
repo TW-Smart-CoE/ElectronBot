@@ -1,0 +1,21 @@
+{
+    "files.associations": {
+        "*.h": "c",
+        "chrono": "cpp",
+        "thread": "cpp",
+        "deque": "cpp",
+        "list": "cpp",
+        "string": "cpp",
+        "vector": "cpp",
+        "__bit_reference": "cpp",
+        "bitset": "cpp"
+    },
+    "cmake.buildEnvironment": {
+    },
+    "cmake.configureArgs": [
+        "-DCMAKE_INSTALL_PREFIX=${workspaceFolder}/output/",
+        // "-DCMAKE_OSX_SYSROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/",
+        "-DCMAKE_OSX_ARCHITECTURES=x86_64;arm64",
+        "-DCMAKE_OSX_DEPLOYMENT_TARGET=12.0"
+    ]
+}

@@ -1,13 +1,19 @@
 #ifndef __USBTRANSMIT_H__
 #define __USBTRANSMIT_H__
 
+#if defined(__WIN32__)
 #include <Windows.h>
 #include <sdkddkver.h>
+#endif
 #include <iostream>
 
 using namespace std;
 
+#if defined(__WIN32__)
 #define DLL_API extern "C" _declspec(dllexport)
+#else
+#define DLL_API
+#endif
 
 #define EP0     0x00
 #define EP1_IN  0x81

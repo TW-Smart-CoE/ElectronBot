@@ -1,9 +1,18 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.19)
 project(ElectronBotSDK-UnityBridge)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_C_STANDARD 11)
 
+if (CMAKE_HOST_APPLE)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -framework Foundation")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -framework CoreFoundation")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -framework IOKit")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -framework Security -framework Accelerate -framework OpenCL -framework AVFoundation -framework CoreGraphics")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -framework CoreMedia -framework CoreVideo")
+endif ()
+
+if (CMAKE_HOST_WIN32)
 include_directories(
         src
         lib
@@ -23,6 +32,67 @@ add_library(${PROJECT_NAME} SHARED
         src/electron_sdk_unity_bridge.cpp)
 
 target_link_libraries(${PROJECT_NAME}
-        ElectronBotSDK-LowLevel;
+        ElectronBotSDK-LowLevel
         opencv_world348d.lib
-        )
+)
+
+elseif (CMAKE_HOST_APPLE)
+
+include_directories(
+        src
+        lib
+        lib/unity
+        ../_Libs/mac/lib
+        # /opt/local/include/opencv4/
+        ../_Libs/mac/include/opencv4/
+        /opt/local/include/boost
+)
+
+link_directories(
+        lib/mac
+        # /opt/local/lib/
+        # /opt/local/lib/opencv4/
+        ../_Libs/mac/opencv4_lib/
+        ../_Libs/mac/opencv4_lib/opencv4/3rdparty
+        ../_Libs/mac/lib/
+        ../build/ElectronBotSDK-LowLevel
+        
+)
+
+
+add_library(${PROJECT_NAME} SHARED
+        src/electron_sdk_unity_bridge.cpp)
+
+target_link_libraries(${PROJECT_NAME}
+        libElectronBotSDK-LowLevel.a
+        libUSBInterface.a
+        libusb-1.0.a
+        libusb.a
+        # opencv_world
+        # opencv_core
+        # opencv_imgcodecs
+        # opencv_imgproc
+        # opencv_videoio
+
+        libopencv_core.a
+        libopencv_imgcodecs.a
+        libopencv_imgproc.a
+        libopencv_videoio.a
+
+        libIlmImf.a
+        libade.a
+        libittnotify.a
+        liblibjpeg-turbo.a
+        liblibopenjp2.a
+        liblibpng.a
+        liblibprotobuf.a
+        liblibtiff.a
+        liblibwebp.a
+        libquirc.a
+        libzlib.a
+)
+
+elseif (CMAKE_HOST_UNIX)
+endif ()
+
+add_dependencies(ElectronBotSDK-UnityBridge ElectronBotSDK-LowLevel)

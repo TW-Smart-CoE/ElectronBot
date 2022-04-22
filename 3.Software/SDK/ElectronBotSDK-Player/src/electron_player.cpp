@@ -1,5 +1,6 @@
 #include "electron_player.h"
 #include <opencv2/opencv.hpp>
+#include <opencv2/videoio/legacy/constants_c.h>
 
 
 bool ElectronPlayer::Connect()
@@ -90,6 +91,9 @@ void ElectronPlayer::PlayTask(ElectronPlayer* _obj, const std::string &_filePath
 
         _obj->lowLevelHandle->SetImageSrc(frame);
         _obj->lowLevelHandle->Sync();
+        // std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        // printf("Played frame %d\n", index);
+        // std::this_thread::sleep_for(std::chrono::seconds(_clientConfig.reconnectInterval));
     }
 
     _obj->isPlaying = false;
