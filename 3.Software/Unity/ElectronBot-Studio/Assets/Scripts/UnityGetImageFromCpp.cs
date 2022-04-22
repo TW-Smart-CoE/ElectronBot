@@ -29,9 +29,6 @@ public class UnityGetImageFromCpp : MonoBehaviour
 
     // #if UNITY_EDITOR
 
-    [DllImport("ElectronBotSDK-LowLevel")]
-    private static extern void LowLevel_OnInit();
-
     [DllImport("ElectronBotSDK-UnityBridge")]
     private static extern void Native_OnKeyFrameChange(string argString);
 
@@ -55,14 +52,6 @@ public class UnityGetImageFromCpp : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        try
-        {
-            LowLevel_OnInit();
-        }
-        catch (EntryPointNotFoundException e)
-        {
-            Logger.Instance.LogError("LowLevel_OnInit can't be load");
-        }
         Logger.Instance.Log("UnityGetImageFromCpp Start");
         FindWebCams();
         OpenCamera();
