@@ -93,6 +93,58 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 elseif (CMAKE_HOST_UNIX)
+
+include_directories(
+        src
+        lib
+        lib/unity
+        /home/uos_user/opensource/stages/include
+        /home/uos_user/opensource/stages/include/libusb-1.0
+        /home/uos_user/opensource/stages/include/opencv4
+)
+
+link_directories(
+        lib/mac
+        # /opt/local/lib/
+        # /opt/local/lib/opencv4/
+        /home/uos_user/opensource/stages/lib
+        /home/uos_user/opensource/stages/lib/opencv4/3rdparty
+        ../build/ElectronBotSDK-LowLevel
+        
+)
+
+
+add_library(${PROJECT_NAME} SHARED
+        src/electron_sdk_unity_bridge.cpp)
+
+target_link_libraries(${PROJECT_NAME}
+        libElectronBotSDK-LowLevel.a
+        libUSBInterface.a
+        libusb-1.0.a
+        libusb.a
+        # opencv_world
+        # opencv_core
+        # opencv_imgcodecs
+        # opencv_imgproc
+        # opencv_videoio
+
+        libopencv_core.a
+        libopencv_imgcodecs.a
+        libopencv_imgproc.a
+        libopencv_videoio.a
+
+        libIlmImf.a
+        libade.a
+        libittnotify.a
+        liblibjpeg-turbo.a
+        liblibopenjp2.a
+        liblibpng.a
+        liblibprotobuf.a
+        liblibtiff.a
+        liblibwebp.a
+        libquirc.a
+        libzlib.a
+)
 endif ()
 
 add_dependencies(ElectronBotSDK-UnityBridge ElectronBotSDK-LowLevel)

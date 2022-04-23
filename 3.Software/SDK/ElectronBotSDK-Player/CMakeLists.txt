@@ -143,6 +143,93 @@ target_link_libraries(Sample_Player
 )
 
 elseif (CMAKE_HOST_UNIX)
+
+include_directories(
+        src
+        lib
+        /home/uos_user/opensource/stages/include
+        /home/uos_user/opensource/stages/include/libusb-1.0
+        /home/uos_user/opensource/stages/include/opencv4
+)
+
+file(GLOB_RECURSE SOURCES
+        "src/*.cpp"
+        )
+
+link_directories(
+        /home/uos_user/opensource/stages/lib
+        /home/uos_user/opensource/stages/lib/opencv4/3rdparty
+        ../build/ElectronBotSDK-LowLevel
+        ../build/ElectronBotSDK-Player
+)
+
+add_library(${PROJECT_NAME} SHARED
+        "src/electron_player.cpp"
+)
+
+target_link_libraries(${PROJECT_NAME}
+        libusb-1.0.a
+        libusb.a
+        libUSBInterface.a
+        libElectronBotSDK-LowLevel.a
+        # opencv_world
+        # opencv_core
+        # opencv_imgcodecs
+        # opencv_imgproc
+        # opencv_videoio
+
+        libopencv_core.a
+        libopencv_imgcodecs.a
+        libopencv_imgproc.a
+        libopencv_videoio.a
+
+        libIlmImf.a
+        libade.a
+        libittnotify.a
+        liblibjpeg-turbo.a
+        liblibopenjp2.a
+        liblibpng.a
+        liblibprotobuf.a
+        liblibtiff.a
+        liblibwebp.a
+        libquirc.a
+        libzlib.a
+)
+
+add_executable(Sample_Player
+        "src/sample.cpp"
+)
+
+target_link_libraries(Sample_Player
+        ${PROJECT_NAME}
+        libusb-1.0.a
+        libusb.a
+        libUSBInterface.a
+        libElectronBotSDK-LowLevel.a
+        # opencv_world
+        # opencv_core
+        # opencv_imgcodecs
+        # opencv_imgproc
+        # opencv_videoio
+
+        libopencv_core.a
+        libopencv_imgcodecs.a
+        libopencv_imgproc.a
+        libopencv_videoio.a
+
+        libIlmImf.a
+        libade.a
+        libittnotify.a
+        liblibjpeg-turbo.a
+        liblibopenjp2.a
+        liblibpng.a
+        liblibprotobuf.a
+        liblibtiff.a
+        liblibwebp.a
+        libquirc.a
+        libzlib.a
+)
+
 endif ()
 
 

@@ -42,6 +42,13 @@ include_directories(
         /opt/local/include/boost
 )
 elseif (CMAKE_HOST_UNIX)
+include_directories(
+        src
+        /home/uos_user/opensource/stages/include
+        /home/uos_user/opensource/stages/include/libusb-1.0
+        /home/uos_user/opensource/stages/include/opencv4
+        #/opt/local/include/boost
+)
 endif ()
 
 file(GLOB_RECURSE SOURCES
@@ -64,6 +71,15 @@ link_directories(
         ../build/ElectronBotSDK-LowLevel
 )
 elseif (CMAKE_HOST_UNIX)
+link_directories(
+        /home/uos_user/opensource/stages/lib
+        /home/uos_user/opensource/stages/lib/opencv4/3rdparty
+        /usr/lib/x85_64-linux-gnu
+        /usr/lib
+        # /opt/local/lib/
+        # /opt/local/lib/opencv4/
+        ../build/ElectronBotSDK-LowLevel
+)
 endif ()
 
 add_library(
@@ -179,6 +195,89 @@ target_link_libraries(Sample_LowLevel
         libzlib.a
 )
 elseif (CMAKE_HOST_UNIX)
+
+target_link_libraries(${PROJECT_NAME}
+        libusb-1.0.a
+        libusb.a
+        libUSBInterface.a
+        # opencv_world
+
+        libIlmImf.a
+        libade.a
+        libittnotify.a
+        liblibjpeg-turbo.a
+        liblibopenjp2.a
+        liblibpng.a
+        liblibprotobuf.a
+        liblibtiff.a
+        liblibwebp.a
+        libquirc.a
+        libzlib.a
+
+        libopencv_imgcodecs.a
+        libopencv_imgproc.a
+        libopencv_videoio.a
+        libopencv_core.a
+
+)
+# target_link_libraries(${PROJECT_NAME}.a
+#         # libusb-1.0.a
+#         libusb.a
+#         libUSBInterface.a
+#         opencv_world
+# )
+
+target_link_libraries(Sample_LowLevel
+        ${PROJECT_NAME}
+        pthread
+        dl
+        m
+        rt
+        libUSBInterface.a
+        libusb.a
+        libusb-1.0.a
+        # opencv_core
+        # opencv_imgcodecs
+        # opencv_imgproc
+        # opencv_videoio
+
+
+        libopencv_video.a
+        libopencv_videoio.a
+        libopencv_imgcodecs.a
+        libopencv_imgproc.a
+        # libopencv_highgui.a
+        libopencv_core.a
+
+        libavcodec.a
+        libavdevice.a
+        libavfilter.a
+        libavformat.a
+        libavresample.a
+        libavutil.a
+        libswresample.a
+        libswscale.a
+
+        libIlmImf.a
+        libade.a
+        libittnotify.a
+        liblibjpeg-turbo.a
+        liblibopenjp2.a
+        liblibjasper.a
+        liblibpng.a
+        liblibprotobuf.a
+        liblibtiff.a
+        liblibwebp.a
+        libquirc.a
+        libzlib.a
+
+        # gdk_pixbuf-2.0
+        # libgdk-x11-2.0.a
+        # libgtk-x11-2.0.a
+        dc1394
+        udev
+
+)
 endif ()
 
 add_dependencies(Sample_LowLevel ElectronBotSDK-LowLevel)
