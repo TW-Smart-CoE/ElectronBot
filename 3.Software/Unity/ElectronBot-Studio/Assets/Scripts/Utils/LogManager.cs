@@ -3,6 +3,17 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
+public interface ILogger
+{
+    void Debug(object message);
+
+    void Info(object message);
+
+    void Warn(object message);
+
+    void Error(object message);
+}
+
 public sealed class LogManager : IDisposable, ILogger
 {
     public static readonly LogManager Instance = new LogManager();
