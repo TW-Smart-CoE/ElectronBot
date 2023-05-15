@@ -3,6 +3,9 @@ project(ElectronBotSDK-Player)
 
 set(CMAKE_CXX_STANDARD 14)
 
+find_package(OpenCV 4.5.5 REQUIRED)
+find_package(Boost 1.81.0 REQUIRED)
+
 if (CMAKE_HOST_APPLE)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -framework Foundation")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -framework CoreFoundation")
@@ -52,24 +55,19 @@ target_link_libraries(Sample
 )
 
 elseif (CMAKE_HOST_APPLE)
-
-
-include_directories(
-        src
-        lib
-        ../_Libs/mac/lib
-        # /opt/local/include/opencv4/
-        ../_Libs/mac/include/opencv4/
-        /opt/local/include/boost
-)
+        include_directories(
+                src
+                lib
+                ../_Libs/mac/lib
+                ${OpenCV_INCLUDE_DIRS}
+                ${Boost_INCLUDE_DIRS}
+        )
 
 file(GLOB_RECURSE SOURCES
         "src/*.cpp"
         )
 
 link_directories(
-        ../_Libs/mac/opencv4_lib/
-        ../_Libs/mac/opencv4_lib/opencv4/3rdparty
         ../_Libs/mac/lib/
         ../build/ElectronBotSDK-LowLevel
         ../build/ElectronBotSDK-Player
@@ -79,68 +77,26 @@ add_library(${PROJECT_NAME} SHARED
         "src/electron_player.cpp"
 )
 
-target_link_libraries(${PROJECT_NAME}
-        libusb-1.0.a
-        libusb.a
-        libUSBInterface.a
-        libElectronBotSDK-LowLevel.a
-        # opencv_world
-        # opencv_core
-        # opencv_imgcodecs
-        # opencv_imgproc
-        # opencv_videoio
-
-        libopencv_core.a
-        libopencv_imgcodecs.a
-        libopencv_imgproc.a
-        libopencv_videoio.a
-
-        libIlmImf.a
-        libade.a
-        libittnotify.a
-        liblibjpeg-turbo.a
-        liblibopenjp2.a
-        liblibpng.a
-        liblibprotobuf.a
-        liblibtiff.a
-        liblibwebp.a
-        libquirc.a
-        libzlib.a
-)
+        target_link_libraries(${PROJECT_NAME}
+                libusb-1.0.a
+                libusb.a
+                libUSBInterface.a
+                libElectronBotSDK-LowLevel.a
+                ${OpenCV_LIBRARIES}
+        )
 
 add_executable(Sample_Player
         "src/sample.cpp"
 )
 
-target_link_libraries(Sample_Player
-        ${PROJECT_NAME}
-        libusb-1.0.a
-        libusb.a
-        libUSBInterface.a
-        libElectronBotSDK-LowLevel.a
-        # opencv_world
-        # opencv_core
-        # opencv_imgcodecs
-        # opencv_imgproc
-        # opencv_videoio
-
-        libopencv_core.a
-        libopencv_imgcodecs.a
-        libopencv_imgproc.a
-        libopencv_videoio.a
-
-        libIlmImf.a
-        libade.a
-        libittnotify.a
-        liblibjpeg-turbo.a
-        liblibopenjp2.a
-        liblibpng.a
-        liblibprotobuf.a
-        liblibtiff.a
-        liblibwebp.a
-        libquirc.a
-        libzlib.a
-)
+        target_link_libraries(Sample_Player
+                ${PROJECT_NAME}
+                libusb-1.0.a
+                libusb.a
+                libUSBInterface.a
+                libElectronBotSDK-LowLevel.a
+                ${OpenCV_LIBRARIES}
+        )
 
 elseif (CMAKE_HOST_UNIX)
 

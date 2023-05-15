@@ -3,6 +3,9 @@ project(ElectronBotSDK-LowLevel)
 
 set(CMAKE_CXX_STANDARD 14)
 
+find_package(OpenCV 4.5.5 REQUIRED)
+find_package(Boost 1.81.0 REQUIRED)
+
 if (CMAKE_HOST_APPLE)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -framework Foundation")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -framework CoreFoundation")
@@ -25,22 +28,22 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -framework CoreMedia -framework CoreVide
 endif ()
 
 if (CMAKE_HOST_WIN32)
-include_directories(
-        src
-        lib
-        D:\\Libraries\\Cpp\\OpenCV_lib\\include
-        D:\\Libraries\\Cpp\\Boost_lib\\include
-        D:\\Libraries\\Cpp\\Boost_lib
-)
+        include_directories(
+                src
+                lib
+
+                # D:\\Libraries\\Cpp\\OpenCV_lib\\include
+                # D:\\Libraries\\Cpp\\Boost_lib\\include
+                # D:\\Libraries\\Cpp\\Boost_lib  
+        )
 elseif (CMAKE_HOST_APPLE)
-include_directories(
-        src
-        lib
-        ../_Libs/mac/lib
-        # /opt/local/include/opencv4/
-        ../_Libs/mac/include/opencv4/
-        /opt/local/include/boost
-)
+        include_directories(
+                src
+                lib
+                ../_Libs/mac/lib
+                ${OpenCV_INCLUDE_DIRS}
+                ${Boost_INCLUDE_DIRS}
+        )
 elseif (CMAKE_HOST_UNIX)
 include_directories(
         src
@@ -63,8 +66,6 @@ link_directories(
 )
 elseif (CMAKE_HOST_APPLE)
 link_directories(
-        ../_Libs/mac/opencv4_lib/
-        ../_Libs/mac/opencv4_lib/opencv4/3rdparty
         ../_Libs/mac/lib/
         # /opt/local/lib/
         # /opt/local/lib/opencv4/
@@ -108,92 +109,27 @@ target_link_libraries(Sample_LowLevel
         ${PROJECT_NAME}
         opencv_world348d.lib
 )
-elseif (CMAKE_HOST_APPLE)
+elseif(CMAKE_HOST_APPLE)
+        target_link_libraries(${PROJECT_NAME}
+                libusb-1.0.a
+                libusb.a
+                libUSBInterface.a
+                ${OpenCV_LIBRARIES}
+        )
 
-target_link_libraries(${PROJECT_NAME}
-        # libusb-1.0.a
-        libusb.a
-        libUSBInterface.a
+        # target_link_libraries(${PROJECT_NAME}.a
+        # # libusb-1.0.a
+        # libusb.a
+        # libUSBInterface.a
         # opencv_world
-        # opencv_core
-        # opencv_imgcodecs
-        # opencv_imgproc
-        # opencv_videoio
-        libopencv_core.a
-        libopencv_imgcodecs.a
-        libopencv_imgproc.a
-        libopencv_videoio.a
-
-        libIlmImf.a
-        libade.a
-        libittnotify.a
-        liblibjpeg-turbo.a
-        liblibopenjp2.a
-        liblibpng.a
-        liblibprotobuf.a
-        liblibtiff.a
-        liblibwebp.a
-        libquirc.a
-        libzlib.a
-)
-target_link_libraries(${PROJECT_NAME}
-        libusb-1.0.a
-        libusb.a
-        libUSBInterface.a
-        # opencv_world
-
-        libopencv_core.a
-        libopencv_imgcodecs.a
-        libopencv_imgproc.a
-        libopencv_videoio.a
-
-        libIlmImf.a
-        libade.a
-        libittnotify.a
-        liblibjpeg-turbo.a
-        liblibopenjp2.a
-        liblibpng.a
-        liblibprotobuf.a
-        liblibtiff.a
-        liblibwebp.a
-        libquirc.a
-        libzlib.a
-)
-# target_link_libraries(${PROJECT_NAME}.a
-#         # libusb-1.0.a
-#         libusb.a
-#         libUSBInterface.a
-#         opencv_world
-# )
-
-target_link_libraries(Sample_LowLevel
-        ${PROJECT_NAME}
-        libusb-1.0.a
-        libusb.a
-        libUSBInterface.a
-        # opencv_core
-        # opencv_imgcodecs
-        # opencv_imgproc
-        # opencv_videoio
-
-        libopencv_core.a
-        libopencv_imgcodecs.a
-        libopencv_imgproc.a
-        libopencv_videoio.a
-
-
-        libIlmImf.a
-        libade.a
-        libittnotify.a
-        liblibjpeg-turbo.a
-        liblibopenjp2.a
-        liblibpng.a
-        liblibprotobuf.a
-        liblibtiff.a
-        liblibwebp.a
-        libquirc.a
-        libzlib.a
-)
+        # )
+        target_link_libraries(Sample_LowLevel
+                ${PROJECT_NAME}
+                libusb-1.0.a
+                libusb.a
+                libUSBInterface.a
+                ${OpenCV_LIBRARIES}
+        )
 elseif (CMAKE_HOST_UNIX)
 
 target_link_libraries(${PROJECT_NAME}

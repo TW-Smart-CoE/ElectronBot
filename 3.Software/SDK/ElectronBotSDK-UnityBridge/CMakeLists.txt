@@ -4,6 +4,9 @@ project(ElectronBotSDK-UnityBridge)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_C_STANDARD 11)
 
+find_package(OpenCV 4.5.5 REQUIRED)
+find_package(Boost 1.81.0 REQUIRED)
+
 if (CMAKE_HOST_APPLE)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -framework Foundation")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -framework CoreFoundation")
@@ -37,60 +40,33 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 elseif (CMAKE_HOST_APPLE)
-
-include_directories(
-        src
-        lib
-        lib/unity
-        ../_Libs/mac/lib
-        # /opt/local/include/opencv4/
-        ../_Libs/mac/include/opencv4/
-        /opt/local/include/boost
-)
+        include_directories(
+                src
+                lib
+                lib/unity
+                ../_Libs/mac/lib
+                ${OpenCV_INCLUDE_DIRS}
+                ${Boost_INCLUDE_DIRS}
+        )
 
 link_directories(
         lib/mac
         # /opt/local/lib/
-        # /opt/local/lib/opencv4/
-        ../_Libs/mac/opencv4_lib/
-        ../_Libs/mac/opencv4_lib/opencv4/3rdparty
         ../_Libs/mac/lib/
         ../build/ElectronBotSDK-LowLevel
-        
 )
 
 
 add_library(${PROJECT_NAME} SHARED
         src/electron_sdk_unity_bridge.cpp)
 
-target_link_libraries(${PROJECT_NAME}
-        libElectronBotSDK-LowLevel.a
-        libUSBInterface.a
-        libusb-1.0.a
-        libusb.a
-        # opencv_world
-        # opencv_core
-        # opencv_imgcodecs
-        # opencv_imgproc
-        # opencv_videoio
-
-        libopencv_core.a
-        libopencv_imgcodecs.a
-        libopencv_imgproc.a
-        libopencv_videoio.a
-
-        libIlmImf.a
-        libade.a
-        libittnotify.a
-        liblibjpeg-turbo.a
-        liblibopenjp2.a
-        liblibpng.a
-        liblibprotobuf.a
-        liblibtiff.a
-        liblibwebp.a
-        libquirc.a
-        libzlib.a
-)
+        target_link_libraries(${PROJECT_NAME}
+                libElectronBotSDK-LowLevel.a
+                libUSBInterface.a
+                libusb-1.0.a
+                libusb.a
+                ${OpenCV_LIBRARIES}
+        )
 
 elseif (CMAKE_HOST_UNIX)
 

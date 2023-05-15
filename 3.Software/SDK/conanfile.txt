@@ -1,0 +1,6 @@
+[requires]
+boost/1.81.0
+opencv/4.5.5
+
+[generators]
+CMakeDeps
